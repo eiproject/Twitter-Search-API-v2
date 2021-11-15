@@ -1,3 +1,3 @@
-from secret import my_bearer
+from .secret import my_bearer
 
 bearer = my_bearer

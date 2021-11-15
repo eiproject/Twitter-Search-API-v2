@@ -34,7 +34,6 @@ def write_csv_header(csv_path):
         writer.writerow(['tweet id', 'tweet text', 'reference type', 'reference id', 'created at', 'like', 'quote', 'reply', 'retweet'])
 
 def save_to_csv(csv_path, array_response):
-    print('save_to_csv')
     with open(csv_path, 'a', newline='', encoding="utf-8") as file:
         writer = csv.writer(file)
         for dict_data in array_response:
@@ -90,7 +89,7 @@ def search(keyword, maximum_result, saving_path):
         else:
             search_result += response_count
             
-        print('+', response_count)
+        print('+', len(array_response))
         print(search_result)
         save_to_csv(saving_path, array_response)
         
