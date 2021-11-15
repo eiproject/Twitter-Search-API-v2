@@ -8,13 +8,14 @@ def create_headers():
 def create_url(keyword):
     search_url = "https://api.twitter.com/2/tweets/search/recent"
     query_params = {
-        'query': keyword, 'max_results': 100, 
+        'query': keyword, 'max_results': 10, 
         'expansions': 'in_reply_to_user_id,referenced_tweets.id,referenced_tweets.id.author_id',
-        'tweet.fields': 'created_at,public_metrics'
+        'tweet.fields': 'created_at,public_metrics',
+        'user.fields': 'username'
     }
     return search_url, query_params
 
-def connect_to_endpoint(url, headers, params, next_token = None):
+def connect_to_endpoint(url, headers, params, next_token=None):
     params['next_token'] = next_token 
     response = requests.request("GET", url, headers = headers, params = params)
     if response.status_code != 200:
@@ -31,16 +32,18 @@ def check_tweet_type(tweet_dict):
 def write_csv_header(csv_path):
     with open(csv_path, 'w', newline='', encoding="utf-8") as file:
         writer = csv.writer(file)
-        writer.writerow(['tweet id', 'tweet text', 'reference type', 'reference id', 
+        writer.writerow(['tweet id', 'username', 'tweet text', 'reference type', 'reference id', 
                          'created at', 'like', 'quote', 'reply', 'retweet'])
 
-def save_to_csv(csv_path, array_response):
+def save_to_csv(csv_path, array_response_data, response_users):
     with open(csv_path, 'a', newline='', encoding="utf-8") as file:
         writer = csv.writer(file)
-        for dict_data in array_response:
+        i = 0
+        for dict_data in array_response_data:
             ref_type, ref_id = check_tweet_type(dict_data)
             writer.writerow(
                 [dict_data['id'], 
+                 response_users[dict_data['author_id']]['username'],
                  dict_data['text'], 
                  ref_type, 
                  ref_id, 
@@ -50,7 +53,16 @@ def save_to_csv(csv_path, array_response):
                  dict_data['public_metrics']['reply_count'],
                  dict_data['public_metrics']['retweet_count']]
                 )
-        
+            i+=1
+
+def fetch_users(json_response):
+    users_dict = {}
+    all_users = json_response['includes']['users']
+    for user in all_users:
+        if user['id'] not in users_dict:
+            users_dict[user['id']] = {'name': user['name'], 'username': user['username']}
+    return users_dict
+
 def search(keyword, maximum_result, saving_path, include_retweet=False):
     url, params = create_url(keyword)
     token = None
@@ -66,7 +78,7 @@ def search(keyword, maximum_result, saving_path, include_retweet=False):
             params=params, 
             next_token=token)
         
-        # print(json.dumps(json_response, indent=2, sort_keys=True))
+        print(json.dumps(json_response, indent=2, sort_keys=True))
 
         if 'next_token' in json_response['meta']:
             token = json_response['meta']['next_token']
@@ -74,30 +86,33 @@ def search(keyword, maximum_result, saving_path, include_retweet=False):
             is_searching = False
             print('Have fetch all Tweets from keyword: {}'.format(keyword))
         
-        array_response = json_response['data']
+        array_response_data = json_response['data']
+        array_response_users = fetch_users(json_response)
         
         if not include_retweet:
-            temp_array_response = []
-            for response in array_response:
+            temp_array_response_data = []
+            i = 0
+            for response in array_response_data:
                 if 'referenced_tweets' not in response:
-                    temp_array_response.append(response)
+                    temp_array_response_data.append(response)
                 else:
                     if response['referenced_tweets'][0]['type'] != 'retweeted':
-                        temp_array_response.append(response)
+                        temp_array_response_data.append(response)
+                i+=1
             
-            array_response = temp_array_response
+            array_response_data = temp_array_response_data
         
-        response_count = len(array_response)
+        response_count = len(array_response_data)
         if search_result + response_count > maximum_result:
             limit_array_response_to = maximum_result - search_result
-            array_response = array_response[:limit_array_response_to]
+            array_response_data = array_response_data[:limit_array_response_to]
             search_result += limit_array_response_to
             is_searching = False
         else:
             search_result += response_count
             
-        print('+', len(array_response))
+        print('+', len(array_response_data))
         print(search_result)
-        save_to_csv(saving_path, array_response)
+        save_to_csv(saving_path, array_response_data, array_response_users)
         
         
