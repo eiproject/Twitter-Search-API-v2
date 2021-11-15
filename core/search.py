@@ -46,7 +46,7 @@ def save_to_csv(csv_path, array_response):
                  dict_data['public_metrics']['retweet_count']]
                 )
         
-def search(keyword, maximum_result, saving_path):
+def search(keyword, maximum_result, saving_path, include_retweet=False):
     url, params = create_url(keyword)
     token = None
     search_result = 0
@@ -70,15 +70,17 @@ def search(keyword, maximum_result, saving_path):
             print('Have fetch all Tweets from keyword: {}'.format(keyword))
         
         array_response = json_response['data']
-        temp_array_response = []
-        for response in array_response:
-            if 'referenced_tweets' not in response:
-                temp_array_response.append(response)
-            else:
-                if response['referenced_tweets'][0]['type'] != 'retweeted':
-                    temp_array_response.append(response)
         
-        array_response = temp_array_response
+        if not include_retweet:
+            temp_array_response = []
+            for response in array_response:
+                if 'referenced_tweets' not in response:
+                    temp_array_response.append(response)
+                else:
+                    if response['referenced_tweets'][0]['type'] != 'retweeted':
+                        temp_array_response.append(response)
+            
+            array_response = temp_array_response
         
         response_count = len(array_response)
         if search_result + response_count > maximum_result:
