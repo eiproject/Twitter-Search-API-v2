@@ -15,23 +15,24 @@ def create_url(keyword):
     return search_url, query_params
 
 def connect_to_endpoint(url, headers, params, next_token = None):
-    params['next_token'] = next_token   #params object received from create_url function
+    params['next_token'] = next_token 
     response = requests.request("GET", url, headers = headers, params = params)
-    # print("Endpoint Response Code: " + str(response.status_code))
     if response.status_code != 200:
         raise Exception(response.status_code, response.text)
     return response.json()
 
 def check_tweet_type(tweet_dict):
     if 'referenced_tweets' in tweet_dict:
-        return tweet_dict['referenced_tweets'][0]['type'], tweet_dict['referenced_tweets'][0]['id']
+        return tweet_dict['referenced_tweets'][0]['type'], \
+            tweet_dict['referenced_tweets'][0]['id']
     else:
         return 'original', None
 
 def write_csv_header(csv_path):
     with open(csv_path, 'w', newline='', encoding="utf-8") as file:
         writer = csv.writer(file)
-        writer.writerow(['tweet id', 'tweet text', 'reference type', 'reference id', 'created at', 'like', 'quote', 'reply', 'retweet'])
+        writer.writerow(['tweet id', 'tweet text', 'reference type', 'reference id', 
+                         'created at', 'like', 'quote', 'reply', 'retweet'])
 
 def save_to_csv(csv_path, array_response):
     with open(csv_path, 'a', newline='', encoding="utf-8") as file:
@@ -39,7 +40,11 @@ def save_to_csv(csv_path, array_response):
         for dict_data in array_response:
             ref_type, ref_id = check_tweet_type(dict_data)
             writer.writerow(
-                [dict_data['id'], dict_data['text'], ref_type, ref_id, dict_data['created_at'], 
+                [dict_data['id'], 
+                 dict_data['text'], 
+                 ref_type, 
+                 ref_id, 
+                 dict_data['created_at'], 
                  dict_data['public_metrics']['like_count'],
                  dict_data['public_metrics']['quote_count'],
                  dict_data['public_metrics']['reply_count'],
