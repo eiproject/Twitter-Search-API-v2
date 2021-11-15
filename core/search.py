@@ -59,7 +59,7 @@ def fetch_mentions(dict_data):
         entities = dict_data['entities']
         if 'mentions' in entities:
             for mention in entities['mentions']:
-                mentions+=mention['username']+','
+                mentions+='@'+mention['username']+','
         else:
             pass
         
