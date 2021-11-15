@@ -33,11 +33,25 @@ def write_csv_header(csv_path):
     with open(csv_path, 'w', newline='', encoding="utf-8") as file:
         writer = csv.writer(file)
         writer.writerow(['tweet id', 'name', 'username', 'tweet text', 'reference type', 'reference id', 
-                         'created at', 'like', 'quote', 'reply', 'retweet', 'tweet url', 'mentions'])
+                         'created at', 'like', 'quote', 'reply', 'retweet', 'tweet url', 'mentions',
+                         'hashtags'])
 
 
-def fetch_hashtags():
-    return 
+def fetch_hashtags(dict_data):
+    hashtags = ''
+    if 'entities' in dict_data:
+        entities = dict_data['entities']
+        if 'hashtags' in entities:
+            for hashtag in entities['hashtags']:
+                hashtags+=hashtag['tag']+','
+        else:
+            pass
+        
+        # remove comma in the end
+        if len(hashtags) > 0:
+            hashtags = hashtags[:-1]
+        
+    return hashtags
 
 def fetch_mentions(dict_data):
     mentions = ''
@@ -65,6 +79,7 @@ def save_to_csv(csv_path, array_response_data, response_users):
             name = response_users[dict_data['author_id']]['name']
             username = response_users[dict_data['author_id']]['username']
             mentions = fetch_mentions(dict_data)
+            hashtags = fetch_hashtags(dict_data)
             writer.writerow(
                 [
                     tweet_id, 
@@ -79,7 +94,8 @@ def save_to_csv(csv_path, array_response_data, response_users):
                     dict_data['public_metrics']['reply_count'],
                     dict_data['public_metrics']['retweet_count'],
                     'https://twitter.com/' + username + '/status/' + tweet_id,
-                    mentions
+                    mentions,
+                    hashtags
                 ]
             )
             i+=1
