@@ -10,7 +10,7 @@ def create_url(keyword):
     query_params = {
         'query': keyword, 'max_results': 10, 
         'expansions': 'in_reply_to_user_id,referenced_tweets.id,referenced_tweets.id.author_id',
-        'tweet.fields': 'created_at,public_metrics',
+        'tweet.fields': 'created_at,public_metrics,entities',
         'user.fields': 'username'
     }
     return search_url, query_params
@@ -33,7 +33,27 @@ def write_csv_header(csv_path):
     with open(csv_path, 'w', newline='', encoding="utf-8") as file:
         writer = csv.writer(file)
         writer.writerow(['tweet id', 'name', 'username', 'tweet text', 'reference type', 'reference id', 
-                         'created at', 'like', 'quote', 'reply', 'retweet', 'tweet url'])
+                         'created at', 'like', 'quote', 'reply', 'retweet', 'tweet url', 'mentions'])
+
+
+def fetch_hashtags():
+    return 
+
+def fetch_mentions(dict_data):
+    mentions = ''
+    if 'entities' in dict_data:
+        entities = dict_data['entities']
+        if 'mentions' in entities:
+            for mention in entities['mentions']:
+                mentions+=mention['username']+','
+        else:
+            pass
+        
+        # remove comma in the end
+        if len(mentions) > 0:
+            mentions = mentions[:-1]
+        
+    return mentions
 
 def save_to_csv(csv_path, array_response_data, response_users):
     with open(csv_path, 'a', newline='', encoding="utf-8") as file:
@@ -44,6 +64,7 @@ def save_to_csv(csv_path, array_response_data, response_users):
             ref_type, ref_id = check_tweet_type(dict_data)
             name = response_users[dict_data['author_id']]['name']
             username = response_users[dict_data['author_id']]['username']
+            mentions = fetch_mentions(dict_data)
             writer.writerow(
                 [
                     tweet_id, 
@@ -57,7 +78,8 @@ def save_to_csv(csv_path, array_response_data, response_users):
                     dict_data['public_metrics']['quote_count'],
                     dict_data['public_metrics']['reply_count'],
                     dict_data['public_metrics']['retweet_count'],
-                    'https://twitter.com/' + username + '/status/' + tweet_id
+                    'https://twitter.com/' + username + '/status/' + tweet_id,
+                    mentions
                 ]
             )
             i+=1
