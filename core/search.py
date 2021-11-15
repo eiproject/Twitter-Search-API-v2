@@ -32,27 +32,34 @@ def check_tweet_type(tweet_dict):
 def write_csv_header(csv_path):
     with open(csv_path, 'w', newline='', encoding="utf-8") as file:
         writer = csv.writer(file)
-        writer.writerow(['tweet id', 'username', 'tweet text', 'reference type', 'reference id', 
-                         'created at', 'like', 'quote', 'reply', 'retweet'])
+        writer.writerow(['tweet id', 'name', 'username', 'tweet text', 'reference type', 'reference id', 
+                         'created at', 'like', 'quote', 'reply', 'retweet', 'tweet url'])
 
 def save_to_csv(csv_path, array_response_data, response_users):
     with open(csv_path, 'a', newline='', encoding="utf-8") as file:
         writer = csv.writer(file)
         i = 0
         for dict_data in array_response_data:
+            tweet_id = dict_data['id']
             ref_type, ref_id = check_tweet_type(dict_data)
+            name = response_users[dict_data['author_id']]['name']
+            username = response_users[dict_data['author_id']]['username']
             writer.writerow(
-                [dict_data['id'], 
-                 response_users[dict_data['author_id']]['username'],
-                 dict_data['text'], 
-                 ref_type, 
-                 ref_id, 
-                 dict_data['created_at'], 
-                 dict_data['public_metrics']['like_count'],
-                 dict_data['public_metrics']['quote_count'],
-                 dict_data['public_metrics']['reply_count'],
-                 dict_data['public_metrics']['retweet_count']]
-                )
+                [
+                    tweet_id, 
+                    name,
+                    username,
+                    dict_data['text'], 
+                    ref_type, 
+                    ref_id, 
+                    dict_data['created_at'], 
+                    dict_data['public_metrics']['like_count'],
+                    dict_data['public_metrics']['quote_count'],
+                    dict_data['public_metrics']['reply_count'],
+                    dict_data['public_metrics']['retweet_count'],
+                    'https://twitter.com/' + username + '/status/' + tweet_id
+                ]
+            )
             i+=1
 
 def fetch_users(json_response):
