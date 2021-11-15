@@ -8,7 +8,7 @@ def create_headers():
 def create_url(keyword):
     search_url = "https://api.twitter.com/2/tweets/search/recent"
     query_params = {
-        'query': keyword, 'max_results': 10, 
+        'query': keyword, 'max_results': 100, 
         'expansions': 'in_reply_to_user_id,referenced_tweets.id,referenced_tweets.id.author_id',
         'tweet.fields': 'created_at,public_metrics,entities',
         'user.fields': 'username'
@@ -123,7 +123,7 @@ def search(keyword, maximum_result, saving_path, include_retweet=False):
             params=params, 
             next_token=token)
         
-        print(json.dumps(json_response, indent=2, sort_keys=True))
+        # print(json.dumps(json_response, indent=2, sort_keys=True))
 
         if 'next_token' in json_response['meta']:
             token = json_response['meta']['next_token']

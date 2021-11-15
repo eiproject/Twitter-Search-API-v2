@@ -1,8 +1,8 @@
 from core.search import search
 
-KEYWORD = 'crypto haram'
-TARGET_RESULTS = 10
-SAVING_PATH = 'result.csv'
+KEYWORD = 'banjir'
+TARGET_RESULTS = 10000
+SAVING_PATH = 'result_banjir.csv'
 
 search(
     keyword=KEYWORD,
