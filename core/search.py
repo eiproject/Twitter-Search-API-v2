@@ -5,21 +5,28 @@ def create_headers():
     headers = {"Authorization": "Bearer {}".format(bearer)}
     return headers
 
-def create_url(keyword):
+def create_url(keyword, end_time, start_time):
     search_url = "https://api.twitter.com/2/tweets/search/recent"
     query_params = {
         'query': keyword, 'max_results': 100, 
         'expansions': 'in_reply_to_user_id,referenced_tweets.id,referenced_tweets.id.author_id',
         'tweet.fields': 'created_at,public_metrics,entities',
-        'user.fields': 'username'
+        'user.fields': 'username',
+        
     }
+    if end_time:
+        query_params['end_time'] = end_time
+        
+    if start_time:
+        query_params['start_time'] = start_time
+        
     return search_url, query_params
 
 def connect_to_endpoint(url, headers, params, next_token=None):
     params['next_token'] = next_token 
     response = requests.request("GET", url, headers = headers, params = params)
-    if response.status_code != 200:
-        raise Exception(response.status_code, response.text)
+    # if response.status_code != 200:
+    #     raise Exception(response.status_code, response.text)
     return response.json()
 
 def check_tweet_type(tweet_dict):
@@ -98,6 +105,7 @@ def save_to_csv(csv_path, array_response_data, response_users):
                     hashtags
                 ]
             )
+            # print(dict_data['created_at'], dict_data['text'])
             i+=1
 
 def fetch_users(json_response):
@@ -108,8 +116,8 @@ def fetch_users(json_response):
             users_dict[user['id']] = {'name': user['name'], 'username': user['username']}
     return users_dict
 
-def search(keyword, maximum_result, saving_path, include_retweet=False):
-    url, params = create_url(keyword)
+def search(keyword, maximum_result, saving_path, include_retweet=False, end_time=None, start_time=None):
+    url, params = create_url(keyword, end_time, start_time)
     token = None
     search_result = 0
     is_searching = True
@@ -123,7 +131,13 @@ def search(keyword, maximum_result, saving_path, include_retweet=False):
             params=params, 
             next_token=token)
         
-        # print(json.dumps(json_response, indent=2, sort_keys=True))
+        if 'status' in json_response:
+            if json_response['status'] == 429:
+                print(json.dumps(json_response, indent=2, sort_keys=True))
+                print('Too Many Requests')
+                import time
+                time.sleep(60) # seconds
+                continue
 
         if 'next_token' in json_response['meta']:
             token = json_response['meta']['next_token']
@@ -156,8 +170,8 @@ def search(keyword, maximum_result, saving_path, include_retweet=False):
         else:
             search_result += response_count
             
-        print('+', len(array_response_data))
-        print(search_result)
         save_to_csv(saving_path, array_response_data, array_response_users)
         
+        print('+', len(array_response_data))
+        print(search_result)
         
