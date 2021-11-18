@@ -2,4 +2,5 @@ venv
 .idea
 core/secret.py
 
+*.csv
 *.pyc
