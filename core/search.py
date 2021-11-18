@@ -1,8 +1,16 @@
 import requests, json, csv
 from core import bearer
+from .secret import my_bearer, my_bearer2
+
+def switch_bearer(bearer):
+    if bearer == my_bearer:
+        bearer = my_bearer2
+    else:
+        bearer = my_bearer
+    return bearer
 
 def create_headers():
-    headers = {"Authorization": "Bearer {}".format(bearer)}
+    headers = {"Authorization": "Bearer {}".format(switch_bearer(bearer))}
     return headers
 
 def create_url(keyword, end_time, start_time):
@@ -135,8 +143,9 @@ def search(keyword, maximum_result, saving_path, include_retweet=False, end_time
             if json_response['status'] == 429:
                 print(json.dumps(json_response, indent=2, sort_keys=True))
                 print('Too Many Requests')
-                import time
-                time.sleep(60) # seconds
+                # import time
+                # time.sleep(60) # seconds
+                bearer = switch_bearer(bearer)
                 continue
 
         if 'next_token' in json_response['meta']:
