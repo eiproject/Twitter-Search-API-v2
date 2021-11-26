@@ -7,3 +7,5 @@ core/secret.py
 
 !fun_fact_on_Twitter.csv
 !indonesian_tweet_about_teroris.csv
+
+bearer_secret
