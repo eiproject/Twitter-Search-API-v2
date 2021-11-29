@@ -2,9 +2,9 @@ from core.search import search
 
 KEYWORD = 'teroris OR terroris lang:id'
 TARGET_RESULTS = 100000
-SAVING_PATH = 'terroris_007.csv'
+SAVING_PATH = 'terroris_008.csv'
 END_TIME = None # in the future, will be fetched first
-START_TIME = '2021-11-24T07:22:19.000Z' # in the past, will be fetched at the end
+START_TIME = '2021-11-25T03:00:27.000Z' # in the past, will be fetched at the end
 
 search(
     keyword=KEYWORD,
