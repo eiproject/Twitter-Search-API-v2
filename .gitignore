@@ -5,7 +5,7 @@ core/secret.py
 *.csv
 *.pyc
 
-!fun_fact_on_Twitter.csv
-!indonesian_tweet_about_teroris.csv
+!fun_fact_on_Twitter*
+!indonesian_tweet_about_teroris*
 
 bearer_secret
