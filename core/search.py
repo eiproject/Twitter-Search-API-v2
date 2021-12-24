@@ -124,6 +124,7 @@ def fetch_users(json_response):
 def search(keyword, maximum_result, saving_path, include_retweet=False, end_time=None, start_time=None):
     url, params = create_url(keyword, end_time, start_time)
     token = None
+    iter = 0
     search_result = 0
     is_searching = True
     
@@ -181,5 +182,6 @@ def search(keyword, maximum_result, saving_path, include_retweet=False, end_time
         save_to_csv(saving_path, array_response_data, array_response_users)
         
         print('+', len(array_response_data))
-        print(search_result)
+        print(search_result + ' / ' + iter * 100)
+        iter+=1
         
