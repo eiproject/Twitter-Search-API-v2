@@ -182,6 +182,6 @@ def search(keyword, maximum_result, saving_path, include_retweet=False, end_time
         save_to_csv(saving_path, array_response_data, array_response_users)
         
         print('+', len(array_response_data))
-        print(search_result + ' / ' + iter * 100)
+        print(f"{search_result} / {iter * 100}")
         iter+=1
         

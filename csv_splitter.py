@@ -30,7 +30,7 @@ def split_csv_to(source_csv, num, result_csv):
 
             num_csv_partial = len(partial_data)
             
-            partial_filename = f'{result_filename}_({num_processed}-{num_processed + num_csv_partial}).csv'
+            partial_filename = f'{result_filename}_({num_processed}-{num_processed + num_csv_partial - 1}).csv'
             write_partial_to_csv(partial_data, partial_filename)
             
             num_processed += num_csv_partial
