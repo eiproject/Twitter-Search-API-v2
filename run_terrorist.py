@@ -5,10 +5,10 @@ from core.csv_tools import append_csv, split_csv_to
 KEYWORD = 'teroris OR terroris lang:id'
 TARGET_RESULTS = 100000
 BIG_FILE_PATH = 'indonesian_tweet_about_teroris.csv'
-END_TIME = None # in the future, will be fetched first
 
 # Must edit section
 SAVING_PATH = 'terroris_023.csv'
+END_TIME = None # in the future, will be fetched first
 START_TIME = '2022-01-18T08:24:30.000Z' # in the past, will be fetched at the end
 
 search_result = search(

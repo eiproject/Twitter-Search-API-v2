@@ -5,10 +5,10 @@ from core.csv_tools import append_csv, split_csv_to
 KEYWORD = '"fun fact" lang:en'
 TARGET_RESULTS = 100000
 BIG_FILE_PATH = 'fun_fact_on_Twitter.csv'
-END_TIME = None # in the future, will be fetched first
 
 # Must edit section
 SAVING_PATH = 'fun_fact_026.csv'
+END_TIME = None # in the future, will be fetched first
 START_TIME = '2022-01-18T08:26:07.000Z' # in the past, will be fetched at the end
 
 search_result = search(
