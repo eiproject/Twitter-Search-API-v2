@@ -184,4 +184,5 @@ def search(keyword, maximum_result, saving_path, include_retweet=False, end_time
         print('+', len(array_response_data))
         print(f"{search_result} / {iter * 100}")
         iter+=1
-        
+    
+    return search_result

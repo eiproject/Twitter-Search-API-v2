@@ -19,18 +19,18 @@ def split_csv_to(source_csv, num, result_csv):
     result_filename = get_filename(result_csv)
     with open(source_csv, 'r', encoding="utf-8") as fi:
         reader = csv.reader(fi, delimiter=',')
-        csv_data = list(reader)
+        csv_data = list(reader)[1:]
         num_csv_data = len(csv_data)
         num_processed = 0
         while num_processed < num_csv_data:  
             if (num_processed + num) < num_csv_data:
                 partial_data = csv_data[:num]
             else:
-                partial_data = csv_data[:(num_csv_data - num_processed)]
+                partial_data = csv_data[num_processed:]
 
             num_csv_partial = len(partial_data)
             
-            partial_filename = f'{result_filename}_({num_processed}-{num_processed + num_csv_partial - 1}).csv'
+            partial_filename = f'{result_filename}_({num_processed + 1}-{num_processed + num_csv_partial}).csv'
             write_partial_to_csv(partial_data, partial_filename)
             
             num_processed += num_csv_partial
@@ -44,4 +44,11 @@ split_csv_to(
     source_csv='fun_fact_on_Twitter.csv',
     num=100000,
     result_csv='fun_fact_on_Twitter.csv'
+)
+
+
+split_csv_to(
+    source_csv='indonesian_tweet_about_teroris.csv',
+    num=100000,
+    result_csv='indonesian_tweet_about_teroris.csv'
 )
