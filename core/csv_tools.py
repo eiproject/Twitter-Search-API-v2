@@ -40,16 +40,22 @@ def split_csv_to(source_csv, num, result_csv):
     with open(source_csv, 'r', encoding="utf-8") as fi:
         reader = csv.reader(fi, delimiter=',')
         print('|-- Reading data: ')
-        csv_data = list(tqdm(reader))[1:]
+        csv_data = list(tqdm(reader))
+        header_data = csv_data[0]
+        csv_data = csv_data[1:]
+        csv_data.reverse()
+        
         num_csv_data = len(csv_data)
         num_processed = 0
         while num_processed < num_csv_data:
             if (num_processed + num) < num_csv_data:
-                partial_data = csv_data[:num]
+                partial_data:list = csv_data[:num]
             else:
-                partial_data = csv_data[num_processed:]
+                partial_data:list = csv_data[num_processed:]
 
             num_csv_partial = len(partial_data)
+            partial_data.reverse()
+            partial_data = [header_data] + partial_data
             
             partial_filename = f'{result_filename}_({num_processed + 1}-{num_processed + num_csv_partial}).csv'
             print('|-- Now writing: ', partial_filename)

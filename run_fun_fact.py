@@ -9,7 +9,7 @@ BIG_FILE_PATH = 'fun_fact_on_Twitter.csv'
 # Must edit section
 SAVING_PATH = 'fun_fact_026.csv'
 END_TIME = None # in the future, will be fetched first
-START_TIME = '2022-01-18T08:26:07.000Z' # in the past, will be fetched at the end
+START_TIME = '2022-01-18T09:16:09.000Z' # in the past, will be fetched at the end
 
 search_result = search(
     keyword=KEYWORD,

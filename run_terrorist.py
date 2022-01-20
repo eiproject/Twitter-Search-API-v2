@@ -7,9 +7,9 @@ TARGET_RESULTS = 100000
 BIG_FILE_PATH = 'indonesian_tweet_about_teroris.csv'
 
 # Must edit section
-SAVING_PATH = 'terroris_023.csv'
+SAVING_PATH = 'terroris_024.csv'
 END_TIME = None # in the future, will be fetched first
-START_TIME = '2022-01-18T08:24:30.000Z' # in the past, will be fetched at the end
+START_TIME = '2022-01-18T09:21:37.000Z' # in the past, will be fetched at the end
 
 search_result = search(
     keyword=KEYWORD,
