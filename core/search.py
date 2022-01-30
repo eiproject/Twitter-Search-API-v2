@@ -147,12 +147,16 @@ def search(keyword, maximum_result, saving_path, include_retweet=False, end_time
                 time.sleep(60) # seconds
                 
                 continue
-
-        if 'next_token' in json_response['meta']:
-            token = json_response['meta']['next_token']
+        
+        if 'meta' in json_response:
+            if 'next_token' in json_response['meta']:
+                token = json_response['meta']['next_token']
+            else:
+                is_searching = False
+                print('Have fetch all Tweets from keyword: {}'.format(keyword))
         else:
-            is_searching = False
-            print('Have fetch all Tweets from keyword: {}'.format(keyword))
+            print('ERROR')
+            print(f'Response: {json_response}')
         
         array_response_data = json_response['data']
         array_response_users = fetch_users(json_response)
