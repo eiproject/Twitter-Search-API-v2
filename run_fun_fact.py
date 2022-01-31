@@ -7,9 +7,9 @@ TARGET_RESULTS = 100000
 BIG_FILE_PATH = 'fun_fact_on_Twitter.csv'
 
 # Must edit section
-SAVING_PATH = 'fun_fact_026.csv'
+SAVING_PATH = 'fun_fact_028.csv'
 END_TIME = None # in the future, will be fetched first
-START_TIME = '2022-01-18T09:16:09.000Z' # in the past, will be fetched at the end
+START_TIME = '2022-01-27T03:46:57.000Z' # in the past, will be fetched at the end
 
 search_result = search(
     keyword=KEYWORD,
@@ -24,7 +24,7 @@ saving_paths = SAVING_PATH.split('.')
 new_saving_path = saving_paths[0] + ' +' + str(search_result - 1) + '.' + saving_paths[-1]
 os.rename(SAVING_PATH, new_saving_path)
 
-if (os.path.isdir(BIG_FILE_PATH)):
+if (os.path.isfile(BIG_FILE_PATH)):
     append_csv(BIG_FILE_PATH, new_saving_path)
 
     split_csv_to(
