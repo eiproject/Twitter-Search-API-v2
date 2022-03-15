@@ -49,7 +49,7 @@ def split_csv_to(source_csv, num, result_csv):
         num_processed = 0
         while num_processed < num_csv_data:
             if (num_processed + num) < num_csv_data:
-                partial_data:list = csv_data[:num]
+                partial_data:list = csv_data[num_processed:num+num_processed]
             else:
                 partial_data:list = csv_data[num_processed:]
 

@@ -7,17 +7,18 @@ TARGET_RESULTS = 100000
 BIG_FILE_PATH = 'indonesian_tweet_about_teroris.csv'
 
 # Must edit section
-SAVING_PATH = 'terroris_029.csv'
+SAVING_PATH = 'terroris_034.csv'
 END_TIME = None # in the future, will be fetched first
-START_TIME = '2022-02-07T02:32:13.000Z' # in the past, will be fetched at the end
+START_TIME = '2022-03-07T08:00:25.000Z' # in the past, will be fetched at the end
 
 search_result = search(
     keyword=KEYWORD,
     maximum_result=TARGET_RESULTS,
     saving_path=SAVING_PATH,
-    include_retweet=False,
+    include_retweet=False,                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          
     end_time=END_TIME,
-    start_time=START_TIME)
+    # start_time=START_TIME
+    )
 
 saving_paths = SAVING_PATH.split('.')
 new_saving_path = saving_paths[0] + ' +' + str(search_result - 1) + '.' + saving_paths[-1]

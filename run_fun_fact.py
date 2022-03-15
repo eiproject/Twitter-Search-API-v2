@@ -7,9 +7,9 @@ TARGET_RESULTS = 100000
 BIG_FILE_PATH = 'fun_fact_on_Twitter.csv'
 
 # Must edit section
-SAVING_PATH = 'fun_fact_031.csv'
+SAVING_PATH = 'fun_fact_036.csv'
 END_TIME = None # in the future, will be fetched first
-START_TIME = '2022-02-07T02:34:46.000Z' # in the past, will be fetched at the end
+START_TIME = '2022-03-07T08:00:25.000Z' # in the past, will be fetched at the end
 
 search_result = search(
     keyword=KEYWORD,
@@ -17,7 +17,8 @@ search_result = search(
     saving_path=SAVING_PATH,
     include_retweet=False,
     end_time=END_TIME,
-    start_time=START_TIME)
+    # start_time=START_TIME
+    )
 
 
 saving_paths = SAVING_PATH.split('.')
